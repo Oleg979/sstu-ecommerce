@@ -107,6 +107,13 @@ export default class Profile extends Component {
                         </Accordion.Collapse>
                       </Card>
                     ))}
+                {orders
+                  .filter(order => order.payload.length > 0)
+                  .filter(order => order.status === "New").length == 0 && (
+                  <Alert variant="danger">
+                    У Вас нет ни одного ожидающего заказа.
+                  </Alert>
+                )}
               </Accordion>
               <h3 style={{ marginBottom: "20px", marginTop: "20px" }}>
                 Ваши завершенные заказы:
@@ -129,6 +136,13 @@ export default class Profile extends Component {
                         </Accordion.Collapse>
                       </Card>
                     ))}
+                {orders
+                  .filter(order => order.payload.length > 0)
+                  .filter(order => order.status === "Accepted").length == 0 && (
+                  <Alert variant="danger">
+                    У Вас нет ни одного завершенного заказа.
+                  </Alert>
+                )}
               </Accordion>
             </div>
           </>

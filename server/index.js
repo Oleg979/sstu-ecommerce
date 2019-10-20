@@ -20,6 +20,9 @@ app.use("/comment", commentController);
 var orderController = require("./controllers/orderController");
 app.use("/order", orderController);
 
+var userController = require("./controllers/userController");
+app.use("/user", userController);
+
 var port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Express server listening on port ${port}`));
 //////////////////////////////////////////////////////////////////////////////////

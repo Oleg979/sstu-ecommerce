@@ -14,7 +14,7 @@ router.use(bodyParser.json());
 var VerifyToken = require("../services/tokenVerificationService");
 var User = require("../models/User");
 var sendMail = require("../services/mailService");
-
+var verifyAdmin = require("../services/adminVerificationService");
 //////////////////////////////////////////////////////////////////////////////////////
 
 router.post("/register", (req, res) => {
@@ -468,12 +468,10 @@ router.post("/register", (req, res) => {
 router.get("/me", VerifyToken, (req, res) => {
   User.findById(req.userId, { password: 0 }, (err, user) => {
     if (err)
-      return res
-        .status(500)
-        .send({
-          res: false,
-          text: "Произошла ошибка на сервере, попробуйте позже."
-        });
+      return res.status(500).send({
+        res: false,
+        text: "Произошла ошибка на сервере, попробуйте позже."
+      });
 
     if (!user)
       return res
@@ -518,7 +516,9 @@ router.post("/login", (req, res) => {
       expiresIn: "24h"
     });
 
-    res.status(200).send({ auth: true, token, name: user.name });
+    res
+      .status(200)
+      .send({ auth: true, token, name: user.name, isAdmin: user.isAdmin, user });
   });
 });
 

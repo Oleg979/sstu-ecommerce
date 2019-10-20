@@ -30,6 +30,11 @@ body .accordion .card-header {
   cursor: pointer;
 }
 
+html .user-card,
+body .user-card {
+  margin-bottom: 25px;
+}
+
 html .mainblock,
 body .mainblock {
   padding: 5%;

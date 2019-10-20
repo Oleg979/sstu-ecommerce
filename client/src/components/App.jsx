@@ -7,10 +7,14 @@ import CardList from "./CardList";
 import Cart from "./Cart";
 import Main from "./Main";
 import Profile from "./Profile";
+import { BASE_URL } from "../config/fetchConfig";
+import AdminOrders from "./AdminOrders";
+import AdminUsers from "./AdminUsers";
 
 export default class App extends Component {
   state = {
     loggedIn: false,
+    isAdmin: false,
     page: "main",
     cartPrice: 0,
     cart: {}
@@ -26,10 +30,30 @@ export default class App extends Component {
       this.setState({ cartPrice: price });
     const db = JSON.parse(localStorage.getItem("cartItems"));
     if (db != null && db != undefined) this.setState({ cart: db });
+
+    fetch(`${BASE_URL}/auth/me`, {
+      headers: {
+        "x-access-token": localStorage.getItem("token")
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.auth === false) {
+          this.setPage("login");
+          localStorage.removeItem("token");
+        } else {
+          this.setState({
+            isAdmin: res.user.isAdmin
+          });
+        }
+      });
   }
 
   setPage = page => {
-    this.setState({ page });
+    this.setState({
+      page,
+      isAdmin: localStorage.getItem("isAdmin") === "true"
+    });
   };
 
   incNumOfItems = price => {
@@ -101,6 +125,7 @@ export default class App extends Component {
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
             setPage={this.setPage}
+            isAdmin={this.state.isAdmin}
           />
           <CardList incNumOfItems={this.addToCart} />
           <footer className="page-footer font-small blue">
@@ -125,6 +150,7 @@ export default class App extends Component {
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
             setPage={this.setPage}
+            isAdmin={this.state.isAdmin}
           />
           <Cart
             cartPrice={this.state.cartPrice}
@@ -142,6 +168,7 @@ export default class App extends Component {
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
             setPage={this.setPage}
+            isAdmin={this.state.isAdmin}
           />
           <Main incNumOfItems={this.addToCart} />
         </>
@@ -152,8 +179,32 @@ export default class App extends Component {
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
             setPage={this.setPage}
+            isAdmin={this.state.isAdmin}
           />
           <Profile />
+        </>
+      )}
+      {this.state.page === "admin-orders" && (
+        <>
+          <Navbar
+            logOut={this.logOut}
+            cartPrice={this.state.cartPrice}
+            setPage={this.setPage}
+            isAdmin={this.state.isAdmin}
+          />
+          <AdminOrders />
+        </>
+      )}
+
+      {this.state.page === "admin-users" && (
+        <>
+          <Navbar
+            logOut={this.logOut}
+            cartPrice={this.state.cartPrice}
+            setPage={this.setPage}
+            isAdmin={this.state.isAdmin}
+          />
+          <AdminUsers />
         </>
       )}
     </div>

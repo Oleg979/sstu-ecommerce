@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 
 var OrderSchema = new mongoose.Schema({
   customerId: String,
+  acceptorId: String,
   payload: [
     {
       itemId: String,

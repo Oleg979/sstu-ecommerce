@@ -1,7 +1,8 @@
 import React from "react";
 import { Navbar, Form, Button, Nav } from "react-bootstrap";
 
-export default ({ logOut, cartPrice, setPage }) => {
+export default ({ logOut, cartPrice, setPage, isAdmin }) => {
+  console.log("is admin " + isAdmin);
   return (
     <>
       <Navbar bg="light" expand="lg" className="navbar-fixed">
@@ -25,6 +26,16 @@ export default ({ logOut, cartPrice, setPage }) => {
             <Nav.Link href="#link" onClick={() => setPage("main")}>
               Каталог
             </Nav.Link>
+            {isAdmin && (
+              <>
+                <Nav.Link href="#link" onClick={() => setPage("admin-orders")}>
+                  Заказы
+                </Nav.Link>
+                <Nav.Link href="#link" onClick={() => setPage("admin-users")}>
+                  Пользователи
+                </Nav.Link>
+              </>
+            )}
           </Nav>
           <Form inline>
             <Button variant="success" onClick={() => setPage("cart")}>

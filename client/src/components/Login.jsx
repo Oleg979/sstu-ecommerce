@@ -33,11 +33,18 @@ export default ({ setPage }) => {
         console.log(data);
         if (!data.auth) {
           notificationService.error(data.text);
+          if (
+            data.text ===
+            "Ваша почта не подтверждена. Проверьте почтовый ящик, мы отправили Вам код потверждения."
+          )
+            setPage("verify");
           return;
         }
-        setPage("main");
         localStorage.setItem("token", data.token);
         localStorage.setItem("name", data.name);
+        localStorage.setItem("isAdmin", data.isAdmin);
+        localStorage.setItem("userId", data.user._id);
+        setPage("main");
         notificationService.success("Успешная авторизация!");
       });
   };

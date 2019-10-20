@@ -1,7 +1,19 @@
 import React from "react";
-import { Table } from "react-bootstrap";
+import { Table, Button, Alert } from "react-bootstrap";
 
-export default ({ status, creationDate, sum, payload, items }) => {
+export default ({
+  status,
+  creationDate,
+  sum,
+  payload,
+  items,
+  users,
+  _id,
+  acceptorId,
+  isAcceptingVisible = false,
+  isAcceptedVisible = false,
+  accept = () => {}
+}) => {
   return (
     <div>
       <Table
@@ -37,6 +49,24 @@ export default ({ status, creationDate, sum, payload, items }) => {
           })}
         </tbody>
       </Table>
+      {isAcceptingVisible && (
+        <>
+          <Button
+            variant="primary"
+            style={{ marginBottom: "0" }}
+            onClick={() => accept(_id)}
+          >
+            Принять заказ
+          </Button>
+        </>
+      )}
+      {isAcceptedVisible && (
+        <Alert variant="primary" style={{marginBottom: "0"}}>
+          Принято администратором:{" "}
+          {users && users.filter(user => user._id == acceptorId)[0].name}(
+          {users && users.filter(user => user._id == acceptorId)[0].email})
+        </Alert>
+      )}
     </div>
   );
 };
