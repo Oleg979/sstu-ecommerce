@@ -73,7 +73,7 @@ export default ({ search, noSearch }) => {
                 <Col sm={{ span: 10, offset: 2 }}>
                   <Form.Check
                     label="Только с отзывами"
-                    onChange={e => setOnlyComments(e.target.value)}
+                    onChange={() => setOnlyComments(!onlyComments)}
                     checked={onlyComments}
                   />
                 </Col>
