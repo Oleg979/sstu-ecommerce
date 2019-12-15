@@ -7,19 +7,22 @@ router.use(bodyParser.json());
 
 var verifyAdmin = require("../services/adminVerificationService");
 var verifyToken = require("../services/tokenVerificationService");
+var getSentiment = require("../services/sentimentAnalysisService");
 
 var Item = require("../models/Item");
 var Comment = require("../models/Comment");
 var User = require("../models/User");
 
-router.post("/", verifyToken, (req, res) => {
-  User.findById(req.userId, { password: 0 }, (err, user) => {
+router.post("/", verifyToken, async (req, res) => {
+  User.findById(req.userId, { password: 0 }, async (err, user) => {
+    const sentiment = await getSentiment(req.body.text);
     Comment.create(
       {
         itemId: req.body.itemId,
         text: req.body.text,
         userName: user.name,
-        creationDate: req.body.creationDate
+        creationDate: req.body.creationDate,
+        sentiment
       },
       (err, comment) => {
         if (err) return res.status(500).send("Произошла ошибка на сервере.");

@@ -49,7 +49,7 @@ export default ({ show, setProductModalShow, item, incNumOfItems }) => {
 
   const addToCart = () => {
     incNumOfItems(item);
-    notificationService.success("Добавлено в корзину!");
+    notificationService.success(`${title} - добавлено в корзину!`);
   };
 
   const postRate = () => {
@@ -122,7 +122,16 @@ export default ({ show, setProductModalShow, item, incNumOfItems }) => {
     })
       .then(data => data.json())
       .then(comments => {
-        console.log(comments);
+        fetch(`${BASE_URL}/comment/${item._id}`, {
+          method: "GET",
+          headers: {
+            "x-access-token": localStorage.getItem("token")
+          }
+        })
+          .then(data => data.json())
+          .then(comments => {
+            setComments(comments);
+          });
       });
   };
   return (
@@ -210,7 +219,16 @@ export default ({ show, setProductModalShow, item, incNumOfItems }) => {
                 <li class="media" key={comment._id}>
                   <div class="media-body">
                     <div class="media-heading">
-                      <div class="author">{comment.userName}</div>
+                      <div
+                        class="author"
+                        style={{ display: "inline", marginRight: "5px" }}
+                      >
+                        {comment.userName}
+                      </div>
+                      <img
+                        src={require(`../assets/sentiment/${comment.sentiment ||
+                          "clock"}.png`)}
+                      ></img>
                       <div class="metadata">
                         <span class="date">{comment.creationDate}</span>
                       </div>

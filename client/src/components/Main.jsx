@@ -147,6 +147,10 @@ export default class Main extends Component {
                             )[0].title
                           }
                         </div>
+                        <img
+                          src={require(`../assets/sentiment/${comment.sentiment ||
+                            "clock"}.png`)}
+                        ></img>
                         <div class="metadata">
                           <span class="date">{comment.creationDate}</span>
                         </div>

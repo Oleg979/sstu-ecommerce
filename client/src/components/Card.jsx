@@ -14,7 +14,7 @@ export default ({
 }) => {
   const addToCart = () => {
     incNumOfItems(wholeItem);
-    notificationService.success("Добавлено в корзину!");
+    notificationService.success(`${title} - добавлено в корзину!`);
   };
   return (
     <Card>

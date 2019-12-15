@@ -1,9 +1,10 @@
 var mongoose = require("mongoose");
 var CommentSchema = new mongoose.Schema({
-    itemId: String,
-    text: String,
-    userName: String,
-    creationDate: String
+  itemId: String,
+  text: String,
+  userName: String,
+  creationDate: String,
+  sentiment: String
 });
 mongoose.model("Comment", CommentSchema);
 
