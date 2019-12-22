@@ -1,5 +1,5 @@
 var nodemailer = require("nodemailer");
-var mailConfig = require("../config/mailConfig");
+var mailConfig = require("../config/mail.config");
 
 //////////////////////////////////////////////////////////////////////////////////////
 

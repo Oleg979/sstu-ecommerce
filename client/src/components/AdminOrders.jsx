@@ -3,11 +3,26 @@ import { BASE_URL } from "../config/fetchConfig";
 import { Accordion, Card, Alert } from "react-bootstrap";
 import Order from "./Order";
 import { notificationService } from "../config/notificationConfig";
+import OrderStat from "./OrderStat";
 
 export default class AdminOrders extends Component {
   state = {
     orders: [],
-    items: []
+    items: [],
+    chartData: {
+      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      datasets: [
+        {
+          label: "My First dataset",
+          backgroundColor: "rgba(255,99,132,0.2)",
+          borderColor: "rgba(255,99,132,1)",
+          borderWidth: 1,
+          hoverBackgroundColor: "rgba(255,99,132,0.4)",
+          hoverBorderColor: "rgba(255,99,132,1)",
+          data: [65, 59, 80, 81, 56, 55, 40]
+        }
+      ]
+    }
   };
   componentDidMount() {
     const orders = localStorage.getItem("orders");
@@ -166,7 +181,12 @@ export default class AdminOrders extends Component {
                     </h5>
                   </Accordion.Toggle>
                   <Accordion.Collapse eventKey={idx}>
-                    <Order {...order} items={items} users={users} isAcceptedVisible={true}/>
+                    <Order
+                      {...order}
+                      items={items}
+                      users={users}
+                      isAcceptedVisible={true}
+                    />
                   </Accordion.Collapse>
                 </Card>
               ))}
@@ -178,6 +198,10 @@ export default class AdminOrders extends Component {
             </Alert>
           )}
         </Accordion>
+        <h3 style={{ marginBottom: "20px", marginTop: "20px" }}>
+          Статистика заказов:
+        </h3>
+        <OrderStat orders={this.state.orders} />
       </div>
     );
   }

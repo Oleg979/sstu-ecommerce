@@ -153,7 +153,7 @@ export default ({ show, setProductModalShow, item, incNumOfItems }) => {
 
           <div class="row">
             <div class="col-md-8">
-              <img class="img-fluid" src={image} alt="" />
+              <img class="img-fluid" src={`${BASE_URL}/${image}`} alt="" />
             </div>
 
             <div class="col-md-4">

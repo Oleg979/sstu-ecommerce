@@ -1,6 +1,6 @@
 const translate = require("translate");
 const sentiment = require("wink-sentiment");
-const { API_KEY } = require("../config/translateConfig");
+const { API_KEY } = require("../config/translate.config");
 
 translate.engine = "yandex";
 translate.key = API_KEY;

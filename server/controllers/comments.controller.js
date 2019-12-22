@@ -5,13 +5,13 @@ var bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
-var verifyAdmin = require("../services/adminVerificationService");
-var verifyToken = require("../services/tokenVerificationService");
-var getSentiment = require("../services/sentimentAnalysisService");
+var verifyAdmin = require("../services/adminVerification.service");
+var verifyToken = require("../services/tokenVerification.service");
+var getSentiment = require("../services/sentimentAnalysis.service");
 
-var Item = require("../models/Item");
-var Comment = require("../models/Comment");
-var User = require("../models/User");
+var Item = require("../models/item.model");
+var Comment = require("../models/comment.model");
+var User = require("../models/user.model");
 
 router.post("/", verifyToken, async (req, res) => {
   User.findById(req.userId, { password: 0 }, async (err, user) => {

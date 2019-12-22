@@ -4,37 +4,50 @@ var express = require("express");
 var router = express.Router();
 var bodyParser = require("body-parser");
 
-router.use(bodyParser.urlencoded({ extended: false }));
-router.use(bodyParser.json());
+router.use(bodyParser.json({ limit: "10mb", extended: true }));
+router.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
-var verifyAdmin = require("../services/adminVerificationService");
-var verifyToken = require("../services/tokenVerificationService");
-var Item = require("../models/Item");
-var Rate = require("../models/Rate");
-
+var verifyAdmin = require("../services/adminVerification.service");
+var verifyToken = require("../services/tokenVerification.service");
+var Item = require("../models/item.model");
+var Rate = require("../models/rate.model");
+var upload = require("../config/storage.config");
 //////////////////////////////////////////////////////////////////////////////////////
 
 router.delete("/:id", verifyAdmin, (req, res) => {
   Item.findByIdAndRemove(req.params.id, (err, item) => {
-    if (err) return res.status(500).send("Произошла ошибка на сервере.");
-    res.status(200).send("Товар: " + item.title + " удалён.");
+    if (err)
+      return res
+        .status(500)
+        .send({ res: false, text: "Произошла ошибка на сервере." });
+    res
+      .status(200)
+      .send({ res: true, text: "Товар: " + item.title + " удалён." });
   });
 });
 
 router.post("/", verifyAdmin, (req, res) => {
-  Item.create(
-    {
-      title: req.body.title,
-      image: req.body.image,
-      price: req.body.price,
-      desc: req.body.desc,
-      type: req.body.type
-    },
-    (err, item) => {
-      if (err) return res.status(500).send("Произошла ошибка на сервере.");
-      res.status(200).send(item);
+  upload(req, res, err => {
+    if (err) {
+      return res.status(500).send({ res: false, text: err });
     }
-  );
+    Item.create(
+      {
+        title: req.body.title,
+        image: req.file.filename,
+        price: req.body.price,
+        desc: req.body.description,
+        type: req.body.type
+      },
+      (err, item) => {
+        if (err)
+          return res
+            .status(500)
+            .send({ res: false, text: "Произошла ошибка на сервере." });
+        res.status(200).send({ res: true, item });
+      }
+    );
+  });
 });
 
 router.get("/", (req, res) => {

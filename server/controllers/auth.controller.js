@@ -6,15 +6,15 @@ var bodyParser = require("body-parser");
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-var config = require("../config/jwtConfig");
+var config = require("../config/jwt.config");
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
-var VerifyToken = require("../services/tokenVerificationService");
-var User = require("../models/User");
-var sendMail = require("../services/mailService");
-var verifyAdmin = require("../services/adminVerificationService");
+var VerifyToken = require("../services/tokenVerification.service");
+var User = require("../models/user.model");
+var sendMail = require("../services/mail.service");
+var verifyAdmin = require("../services/adminVerification.service");
 //////////////////////////////////////////////////////////////////////////////////////
 
 router.post("/register", (req, res) => {
@@ -516,9 +516,13 @@ router.post("/login", (req, res) => {
       expiresIn: "24h"
     });
 
-    res
-      .status(200)
-      .send({ auth: true, token, name: user.name, isAdmin: user.isAdmin, user });
+    res.status(200).send({
+      auth: true,
+      token,
+      name: user.name,
+      isAdmin: user.isAdmin,
+      user
+    });
   });
 });
 

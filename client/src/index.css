@@ -324,6 +324,9 @@ body .verify button {
   .cardlist {
     grid-template-columns: 1fr 1fr !important;
   }
+  .cardlist-main {
+    grid-template-columns: 1fr 1fr !important;
+  }
 }
 
 @media screen and (max-width: 421px) {
@@ -354,6 +357,15 @@ body .verify button {
   }
   .cardlist {
     grid-template-columns: 1fr !important;
+  }
+  .cardlist-main {
+    grid-template-columns: 1fr !important;
+  }
+  .admin-item {
+    flex-direction: column;
+  }
+  .admin-item .item-title {
+    margin-bottom: 10px;
   }
   .modal {
     padding-right: 0 !important;

@@ -34,6 +34,9 @@ export default ({ logOut, cartPrice, setPage, isAdmin }) => {
                 <Nav.Link href="#link" onClick={() => setPage("admin-users")}>
                   Пользователи
                 </Nav.Link>
+                <Nav.Link href="#link" onClick={() => setPage("admin-items")}>
+                  Товары
+                </Nav.Link>
               </>
             )}
           </Nav>

@@ -10,6 +10,7 @@ import Profile from "./Profile";
 import { BASE_URL } from "../config/fetchConfig";
 import AdminOrders from "./AdminOrders";
 import AdminUsers from "./AdminUsers";
+import AdminItems from "./AdminItems";
 
 export default class App extends Component {
   state = {
@@ -205,6 +206,18 @@ export default class App extends Component {
             isAdmin={this.state.isAdmin}
           />
           <AdminUsers />
+        </>
+      )}
+
+      {this.state.page === "admin-items" && (
+        <>
+          <Navbar
+            logOut={this.logOut}
+            cartPrice={this.state.cartPrice}
+            setPage={this.setPage}
+            isAdmin={this.state.isAdmin}
+          />
+          <AdminItems />
         </>
       )}
     </div>

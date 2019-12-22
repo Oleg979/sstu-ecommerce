@@ -5,11 +5,11 @@ var bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
-var sendMail = require("../services/mailService");
-var verifyAdmin = require("../services/adminVerificationService");
-var verifyToken = require("../services/tokenVerificationService");
-var User = require("../models/User");
-var Order = require("../models/Order");
+var sendMail = require("../services/mail.service");
+var verifyAdmin = require("../services/adminVerification.service");
+var verifyToken = require("../services/tokenVerification.service");
+var User = require("../models/user.model");
+var Order = require("../models/order.model");
 
 router.post("/", verifyToken, (req, res) => {
   Order.create(

@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { notificationService } from "../config/notificationConfig";
+import { BASE_URL } from "../config/fetchConfig";
 
 export default ({
   setProductModalShow,
@@ -18,7 +19,7 @@ export default ({
   };
   return (
     <Card>
-      <Card.Img variant="top" src={image} />
+      <Card.Img variant="top" src={`${BASE_URL}/${image}`} />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Text>{desc}</Card.Text>
