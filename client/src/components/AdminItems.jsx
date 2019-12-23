@@ -110,6 +110,9 @@ export default function AdminItems() {
                       type="button"
                       class="btn btn-warning"
                       style={{ marginRight: 15 }}
+                      data-toggle="modal"
+                      data-target="#editModal"
+                      onClick={() => setCurrentItem(item)}
                     >
                       Изменить
                     </button>
@@ -129,52 +132,151 @@ export default function AdminItems() {
         ))}
       </div>
       {currentItem && (
-        <div
-          class="modal fade"
-          id="deleteModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                  Удалить товар {currentItem.title}
-                </h5>
-                <button
-                  type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                Вы уверены? Данное действие нельзя будет отменить.
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Отмена
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  data-dismiss="modal"
-                  onClick={() => deleteItem(currentItem)}
-                >
-                  Удалить
-                </button>
+        <>
+          <div
+            class="modal fade"
+            id="deleteModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    Удалить товар {currentItem.title}
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Вы уверены? Данное действие нельзя будет отменить.
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-dismiss="modal"
+                    onClick={() => deleteItem(currentItem)}
+                  >
+                    Удалить
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          <div
+            class="modal fade"
+            id="editModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    Изменить товар {currentItem.title}
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="form-add">
+                    <div class="form-group">
+                      <label for="exampleFormControlInput1">Название</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="exampleFormControlInput1"
+                        value={currentItem.title}
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlSelect1">Категория</label>
+                      <select
+                        class="form-control"
+                        id="exampleFormControlSelect1"
+                        value={currentItem.type}
+                      >
+                        {ITEM_TYPES.map(type => (
+                          <option value={type}>{type}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">Описание</label>
+                      <textarea
+                        class="form-control"
+                        id="exampleFormControlTextarea1"
+                        rows="3"
+                        value={currentItem.desc}
+                      ></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">
+                        Цена: {currentItem.price}₽
+                      </label>
+                      <Form.Control
+                        id="pr"
+                        type="range"
+                        min="49"
+                        max="599"
+                        value={currentItem.price}
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlFile1">Изображение</label>
+                      <input
+                        type="file"
+                        class="form-control-file"
+                        id="exampleFormControlFile1"
+                        accept="image/jpeg,image/png,image/gif"
+                      />
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-dismiss="modal"
+                  >
+                    Сохранить
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
       )}
       <div
         class="modal fade"
@@ -236,7 +338,9 @@ export default function AdminItems() {
                   ></textarea>
                 </div>
                 <div class="form-group">
-                  <label for="exampleFormControlTextarea1">Цена</label>
+                  <label for="exampleFormControlTextarea1">
+                    Цена: {price}₽
+                  </label>
                   <Form.Control
                     id="pr"
                     type="range"
