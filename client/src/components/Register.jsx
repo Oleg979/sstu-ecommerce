@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { notificationService } from "../config/notificationConfig";
 import { BASE_URL } from "../config/fetchConfig";
+import { useHistory } from "react-router-dom";
 
 export default ({ setPage }) => {
   let [email, setEmail] = useState("");
   let [pass, setPass] = useState("");
   let [name, setName] = useState("");
   let [repeatPass, setRepeatPass] = useState("");
+
+  const history = useHistory();
 
   const register = () => {
     if (
@@ -32,23 +35,23 @@ export default ({ setPage }) => {
     fetch(`${BASE_URL}/auth/register`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email,
         password: pass,
-        name
-      })
+        name,
+      }),
     })
-      .then(data => data.json())
-      .then(data => {
+      .then((data) => data.json())
+      .then((data) => {
         console.log(data);
         if (!data.auth) {
           notificationService.error(data.text);
           return;
         }
         localStorage.setItem("email", email);
-        setPage("verify");
+        history.push("/verify");
         notificationService.success(
           "Успешная регистрация! Теперь введите код верификации, отправленный на почту " +
             email
@@ -65,7 +68,7 @@ export default ({ setPage }) => {
           <Form.Control
             type="email"
             placeholder="example@gmail.com"
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Form.Text className="text-muted">
             Ваш адрес электронной почты будет виден другим пользователям
@@ -76,7 +79,7 @@ export default ({ setPage }) => {
           <Form.Control
             type="email"
             placeholder="Иван Иванов"
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
         </Form.Group>
         <Form.Group controlId="formBasicPassword">
@@ -84,7 +87,7 @@ export default ({ setPage }) => {
           <Form.Control
             type="password"
             placeholder="123456"
-            onChange={e => setPass(e.target.value)}
+            onChange={(e) => setPass(e.target.value)}
           />
         </Form.Group>
         <Form.Group controlId="formBasicPassword">
@@ -92,13 +95,13 @@ export default ({ setPage }) => {
           <Form.Control
             type="password"
             placeholder="123456"
-            onChange={e => setRepeatPass(e.target.value)}
+            onChange={(e) => setRepeatPass(e.target.value)}
           />
         </Form.Group>
         <Button variant="primary" onClick={register}>
           Зарегистрироваться
         </Button>
-        <Button variant="secondary" onClick={() => setPage("login")}>
+        <Button variant="secondary" onClick={() => history.push("/login")}>
           У меня уже есть аккаунт
         </Button>
       </Form>

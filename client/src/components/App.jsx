@@ -11,20 +11,22 @@ import { BASE_URL } from "../config/fetchConfig";
 import AdminOrders from "./AdminOrders";
 import AdminUsers from "./AdminUsers";
 import AdminItems from "./AdminItems";
+import { Switch, Route } from "react-router-dom";
+import { withRouter } from "react-router";
 
-export default class App extends Component {
+class App extends Component {
   state = {
     loggedIn: false,
     isAdmin: false,
     page: "main",
     cartPrice: 0,
-    cart: {}
+    cart: {},
   };
 
   componentDidMount() {
     const token = localStorage.getItem("token");
 
-    if (token == null || token == undefined) this.setPage("login");
+    if (token == null || token == undefined) this.props.history.push("/login");
     else this.setPage(this.state.page);
     const price = localStorage.getItem("cartPrice");
     if (price != null && price != undefined)
@@ -34,42 +36,42 @@ export default class App extends Component {
 
     fetch(`${BASE_URL}/auth/me`, {
       headers: {
-        "x-access-token": localStorage.getItem("token")
-      }
+        "x-access-token": localStorage.getItem("token"),
+      },
     })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.auth === false) {
-          this.setPage("login");
+          this.props.history.push("/login");
           localStorage.removeItem("token");
         } else {
           this.setState({
-            isAdmin: res.user.isAdmin
+            isAdmin: res.user.isAdmin,
           });
         }
       });
   }
 
-  setPage = page => {
+  setPage = (page) => {
     this.setState({
       page,
-      isAdmin: localStorage.getItem("isAdmin") === "true"
+      isAdmin: localStorage.getItem("isAdmin") === "true",
     });
   };
 
-  incNumOfItems = price => {
+  incNumOfItems = (price) => {
     this.setState({ cartPrice: Number(this.state.cartPrice) + price }, () => {
       localStorage.setItem("cartPrice", this.state.cartPrice);
     });
   };
 
-  decNumOfItems = price => {
+  decNumOfItems = (price) => {
     this.setState({ cartPrice: Number(this.state.cartPrice) - price }, () => {
       localStorage.setItem("cartPrice", this.state.cartPrice);
     });
   };
 
-  addToCart = item => {
+  addToCart = (item) => {
     const id = item._id;
     this.incNumOfItems(item.price);
     this.state.cart[id]
@@ -84,7 +86,7 @@ export default class App extends Component {
         });
   };
 
-  removeFromCart = item => {
+  removeFromCart = (item) => {
     const id = item._id;
     this.decNumOfItems(item.price);
     if (this.state.cart[id] == 1) {
@@ -113,15 +115,15 @@ export default class App extends Component {
   logOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("name");
-    this.setPage("login");
+    this.props.history.push("/login");
   };
 
-  setProductModalShow = bool => this.setState({ productModalShow: bool });
+  setProductModalShow = (bool) => this.setState({ productModalShow: bool });
 
   render = () => (
     <div className="app">
-      {this.state.page === "main" && (
-        <>
+      <Switch>
+        <Route path="/catalog">
           <Navbar
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
@@ -131,22 +133,21 @@ export default class App extends Component {
           <CardList incNumOfItems={this.addToCart} />
           <footer className="page-footer font-small blue">
             <div className="footer-copyright text-center py-3">
-              © 2019 Copyright:
-              <a href="https://mdbootstrap.com/education/bootstrap/">
-                {" "}
-                FoodStore.com
-              </a>
+              © 2020 Copyright:
+              <a href="https://vk.com/siltstrider"> FoodStore.com</a>
             </div>
           </footer>
-        </>
-      )}
-      {this.state.page === "login" && <LoginPage setPage={this.setPage} />}
-      {this.state.page === "register" && (
-        <RegisterPage setPage={this.setPage} />
-      )}
-      {this.state.page === "verify" && <VerifyPage setPage={this.setPage} />}
-      {this.state.page === "cart" && (
-        <>
+        </Route>
+        <Route path="/login">
+          <LoginPage setPage={this.setPage} />
+        </Route>
+        <Route path="/register">
+          <RegisterPage setPage={this.setPage} />
+        </Route>
+        <Route path="/verify">
+          <VerifyPage setPage={this.setPage} />
+        </Route>
+        <Route path="/cart">
           <Navbar
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
@@ -161,10 +162,8 @@ export default class App extends Component {
             remove={this.removeFromCart}
             clearCart={this.clearCart}
           />
-        </>
-      )}
-      {this.state.page === "title" && (
-        <>
+        </Route>
+        <Route path="/" exact>
           <Navbar
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
@@ -172,10 +171,8 @@ export default class App extends Component {
             isAdmin={this.state.isAdmin}
           />
           <Main incNumOfItems={this.addToCart} />
-        </>
-      )}
-      {this.state.page === "profile" && (
-        <>
+        </Route>
+        <Route path="/profile">
           <Navbar
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
@@ -183,10 +180,8 @@ export default class App extends Component {
             isAdmin={this.state.isAdmin}
           />
           <Profile />
-        </>
-      )}
-      {this.state.page === "admin-orders" && (
-        <>
+        </Route>
+        <Route path="/admin-orders">
           <Navbar
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
@@ -194,11 +189,8 @@ export default class App extends Component {
             isAdmin={this.state.isAdmin}
           />
           <AdminOrders />
-        </>
-      )}
-
-      {this.state.page === "admin-users" && (
-        <>
+        </Route>
+        <Route path="/admin-users">
           <Navbar
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
@@ -206,11 +198,9 @@ export default class App extends Component {
             isAdmin={this.state.isAdmin}
           />
           <AdminUsers />
-        </>
-      )}
+        </Route>
 
-      {this.state.page === "admin-items" && (
-        <>
+        <Route path="/admin-items">
           <Navbar
             logOut={this.logOut}
             cartPrice={this.state.cartPrice}
@@ -218,8 +208,10 @@ export default class App extends Component {
             isAdmin={this.state.isAdmin}
           />
           <AdminItems />
-        </>
-      )}
+        </Route>
+      </Switch>
     </div>
   );
 }
+
+export default withRouter(App);

@@ -6,8 +6,8 @@
   "author": "Олег <olegsolovev506@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "dependencies": {
     "axios": "^0.19.0",

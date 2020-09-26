@@ -1,12 +1,14 @@
 import React from "react";
 import { Navbar, Form, Button, Nav } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 
 export default ({ logOut, cartPrice, setPage, isAdmin }) => {
   console.log("is admin " + isAdmin);
+  const history = useHistory();
   return (
     <>
       <Navbar bg="light" expand="lg" className="navbar-fixed">
-        <Navbar.Brand href="#home">
+        <Navbar.Brand onClick={() => history.push("/")}>
           <img
             alt=""
             src={require("../assets/burger.png")}
@@ -20,34 +22,32 @@ export default ({ logOut, cartPrice, setPage, isAdmin }) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#home" onClick={() => setPage("title")}>
-              Главная
-            </Nav.Link>
-            <Nav.Link href="#link" onClick={() => setPage("main")}>
+            <Nav.Link onClick={() => history.push("/")}>Главная</Nav.Link>
+            <Nav.Link onClick={() => history.push("/catalog")}>
               Каталог
             </Nav.Link>
             {isAdmin && (
               <>
-                <Nav.Link href="#link" onClick={() => setPage("admin-orders")}>
+                <Nav.Link onClick={() => history.push("/admin-orders")}>
                   Заказы
                 </Nav.Link>
-                <Nav.Link href="#link" onClick={() => setPage("admin-users")}>
+                <Nav.Link onClick={() => history.push("/admin-users")}>
                   Пользователи
                 </Nav.Link>
-                <Nav.Link href="#link" onClick={() => setPage("admin-items")}>
+                <Nav.Link onClick={() => history.push("/admin-items")}>
                   Товары
                 </Nav.Link>
               </>
             )}
           </Nav>
           <Form inline>
-            <Button variant="success" onClick={() => setPage("cart")}>
+            <Button variant="success" onClick={() => history.push("/cart")}>
               Корзина {cartPrice === 0 ? "(пусто)" : `(${cartPrice}₽)`}
             </Button>
             <Button
               variant="outline-success"
               onClick={() => {
-                setPage("profile");
+                history.push("/profile");
               }}
             >
               Мой профиль
